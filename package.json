@@ -1,0 +1,8 @@
+{
+  "name": "monorepo",
+  "version": "0.0.0",
+  "scripts": {
+    "deploy:web": "git subtree push --prefix web/ heroku-web master",
+    "logs:web": "heroku logs --tail --remote heroku-web"
+  }
+}

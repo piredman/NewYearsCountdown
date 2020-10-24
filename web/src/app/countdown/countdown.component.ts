@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { interval, Subscription, of } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { take, map } from 'rxjs/operators';
@@ -16,14 +16,14 @@ export interface CountdownTime {
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.scss'],
 })
-export class CountdownComponent implements OnInit {
+export class CountdownComponent implements OnInit, OnDestroy {
   countdownTime$: Observable<CountdownTime>;
   private sub: Subscription;
 
   constructor() {}
 
-  ngOnInit() {
-    var timer = interval(1000).pipe(map(() => this.getCountdown()));
+  ngOnInit(): void {
+    const timer = interval(1000).pipe(map(() => this.getCountdown()));
     timer.subscribe();
   }
 
@@ -31,15 +31,15 @@ export class CountdownComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  getCountdown() {
-    var dateFuture = new Date(new Date().getFullYear() + 1, 0, 1);
-    var dateNow = new Date();
+  getCountdown(): void {
+    const dateFuture = new Date(new Date().getFullYear() + 1, 0, 1);
+    const dateNow = new Date();
 
-    var offset = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    var seconds = Math.floor((dateFuture.getTime() - dateNow.getTime()) / 1000);
-    var minutes = Math.floor(seconds / 60);
-    var hours = Math.floor(minutes / 60);
-    var days = Math.floor(hours / 24);
+    const offset = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let seconds = Math.floor((dateFuture.getTime() - dateNow.getTime()) / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
 
     hours = hours - days * 24;
     minutes = minutes - days * 24 * 60 - hours * 60;

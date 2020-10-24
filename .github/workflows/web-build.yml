@@ -1,0 +1,49 @@
+name: web build
+
+on:
+  push:
+    branches: [master]
+    paths: ["web/**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: npm install
+        working-directory: ./web
+        run: npm ci
+
+      - name: lint
+        working-directory: ./web
+        run: npm run lint
+
+      # todo: add karma tests
+
+      - name: build
+        working-directory: ./web
+        run: npm run build
+
+      - name: deploy
+        uses: akhileshns/heroku-deploy@v3.0.4
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "newyears-countdown"
+          heroku_email: "paul.i.redman@gmail.com"
+          appdir: "web"
