@@ -24,7 +24,9 @@
     </div>
   </div>
   <div *ngIf="celebrate">
-    <div class="text celebrate rainbow_text_animated">Happy New Years!</div>
+    <div class="text celebrate rainbow_text_animated">
+      Happy {{ eventName }}!
+    </div>
   </div>
   <div class="current-time">
     {{ data.primaryDateTime | dateTime }}
