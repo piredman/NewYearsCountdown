@@ -3,18 +3,30 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ListComponent } from './list/list.component';
+import { DateTimePipe } from './common/date-time.pipe';
+import { RegionComponent } from './region/region.component';
 import { CountdownComponent } from './countdown/countdown.component';
+import { ConfigureComponent } from './configure/configure.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CountdownComponent
+    ListComponent,
+    DateTimePipe,
+    RegionComponent,
+    CountdownComponent,
+    ConfigureComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

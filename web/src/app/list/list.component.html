@@ -1,0 +1,7 @@
+<div class="component" *ngIf="timeZoneRegions">
+  <app-region
+    *ngFor="let timeZoneRegion of timeZoneRegions"
+    [eventName]="eventName"
+    [data]="timeZoneRegion"
+  ></app-region>
+</div>

@@ -1,0 +1,16 @@
+<div class="container">
+  <h1 class="title">Configure Your Countdown!</h1>
+  <div class="fields">
+    <label class="label"
+      >Event Name
+      <input class="field" type="text" [formControl]="eventName" />
+    </label>
+    <label class="label"
+      >Event Date
+      <input class="field" type="datetime-local" [formControl]="eventDate" />
+    </label>
+  </div>
+  <div class="actions">
+    <button class="button" href="#" (click)="onOpen()">Open</button>
+  </div>
+</div>

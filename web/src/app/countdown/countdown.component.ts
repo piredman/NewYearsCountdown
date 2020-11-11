@@ -1,15 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Subscription, of } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
-import { take, map } from 'rxjs/operators';
-
-export interface CountdownTime {
-  offset: string;
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+import { ActivatedRoute } from '@angular/router';
+import { TimeZone } from '@vvo/tzdb';
+import { DateTime, Duration } from 'luxon';
+import { Subscription, interval } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DateTimeService } from '../common/date-time.service';
+import { TimeZoneRegion } from '../timezone/time-zone-region';
+import { TimeZoneService } from '../timezone/time-zone.service';
 
 @Component({
   selector: 'app-countdown',
@@ -17,40 +14,144 @@ export interface CountdownTime {
   styleUrls: ['./countdown.component.scss'],
 })
 export class CountdownComponent implements OnInit, OnDestroy {
-  countdownTime$: Observable<CountdownTime>;
-  private sub: Subscription;
+  eventName: string;
+  targetTime: DateTime;
+  targetTimeBuffer = 55;
+  celebrate = false;
+  celebrating = false;
+  audio: HTMLAudioElement;
 
-  constructor() {}
+  timeZoneGroups: TimeZoneRegion[];
+  timeZoneRegion: TimeZoneRegion;
+
+  private timerSubscription: Subscription;
+
+  constructor(
+    private route: ActivatedRoute,
+    private timeZoneService: TimeZoneService,
+    private dateTimeService: DateTimeService
+  ) {}
 
   ngOnInit(): void {
-    const timer = interval(1000).pipe(map(() => this.getCountdown()));
-    timer.subscribe();
+    this.audio = new Audio();
+    this.audio.src = '/assets/farting-around.mp3';
+    this.audio.load();
+    this.audio.addEventListener('ended', this.stopCelebrating);
+
+    this.route.queryParamMap.subscribe((params) => {
+      this.eventName = this.asString(params.get('event'), 'New Years');
+      this.targetTime = DateTime.fromObject({
+        year: this.asNumber(params.get('year'), DateTime.local().year + 1),
+        month: this.asNumber(params.get('month'), 1),
+        day: this.asNumber(params.get('day'), 1),
+        hour: this.asNumber(params.get('hour'), 0),
+        minute: this.asNumber(params.get('minute'), 0),
+        second: this.asNumber(params.get('second'), 0),
+      });
+
+      this.load();
+    });
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
   }
 
-  getCountdown(): void {
-    const dateFuture = new Date(new Date().getFullYear() + 1, 0, 1);
-    const dateNow = new Date();
+  asString(value: string, fallback: string): string {
+    if (!value) {
+      return fallback;
+    }
 
-    const offset = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    let seconds = Math.floor((dateFuture.getTime() - dateNow.getTime()) / 1000);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+    return value;
+  }
 
-    hours = hours - days * 24;
-    minutes = minutes - days * 24 * 60 - hours * 60;
-    seconds = seconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
+  asNumber(value: string, fallback: number): number {
+    if (!value) {
+      return fallback;
+    }
 
-    this.countdownTime$ = of({
-      offset,
-      days,
-      hours,
-      minutes,
-      seconds,
+    const result = Number(value);
+    return isNaN(result) ? fallback : result;
+  }
+
+  load(): void {
+    this.timeZoneGroups = this.timeZoneService.getTimeZones(this.targetTime);
+
+    const timer = interval(1000).pipe(
+      map((intervalValue) => {
+        const activeTimeZoneGroup = this.getActiveTimeZoneGroup(
+          this.timeZoneGroups
+        );
+        this.celebrate = this.isWithinBuffer(activeTimeZoneGroup.duration);
+        if (this.celebrate && !this.celebrating) {
+          this.startCelebrating();
+        }
+        return this.advanceActiveTimeZone(
+          activeTimeZoneGroup,
+          intervalValue,
+          this.celebrate ? 1 : 5
+        );
+      })
+    );
+    this.timerSubscription = timer.subscribe();
+  }
+
+  isWithinBuffer(duration: Duration): boolean {
+    if (!duration) {
+      return false;
+    }
+
+    return Math.floor(duration.as('seconds')) <= 0;
+  }
+
+  startCelebrating(): void {
+    if (this.celebrating) {
+      return;
+    }
+
+    this.celebrating = true;
+    this.audio.currentTime = 0;
+    this.audio.play();
+  }
+
+  stopCelebrating(): void {
+    this.celebrating = false;
+  }
+
+  advanceActiveTimeZone(
+    group: TimeZoneRegion,
+    intervalValue: number,
+    tickSpeed: number
+  ): void {
+    const advanceName = intervalValue % tickSpeed === 0;
+    group.currentZoneIndex = advanceName
+      ? this.getNextTimeZoneIndex(group.timeZones, group.currentZoneIndex)
+      : group.currentZoneIndex;
+    group.duration = this.dateTimeService.getDifferenceToTarget(
+      group.primaryDateTime,
+      this.targetTime
+    );
+
+    this.timeZoneRegion = group;
+  }
+
+  getActiveTimeZoneGroup(groups: TimeZoneRegion[]): TimeZoneRegion {
+    return groups.find((group) => {
+      return (
+        Math.floor(
+          group.duration.plus({ seconds: this.targetTimeBuffer }).as('seconds')
+        ) > 0
+      );
     });
+  }
+
+  getNextTimeZoneIndex(timeZones: TimeZone[], index: number): number {
+    let nextIndex = index + 1;
+    if (nextIndex > timeZones.length - 1) {
+      nextIndex = 0;
+    }
+    return nextIndex;
   }
 }

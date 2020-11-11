@@ -1,0 +1,107 @@
+.container {
+  color: #fff;
+  line-height: 1.5;
+  margin: 0.5em;
+  border: white solid 0.5em;
+  padding: 2em 0;
+  background-image: url(/assets/dots.svg);
+  background-size: cover;
+  // viewBox="0 0 1765.35 986"
+}
+
+.time-zone-name {
+  font-size: 3em;
+  text-align: center;
+  line-height: 0.75;
+}
+
+.text {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.current-time {
+  text-align: center;
+}
+
+.duration {
+  height: 100%;
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0.25rem;
+  padding: 0.5em;
+  width: 5rem;
+  height: 5rem;
+  line-height: 1;
+  background-color: #32857f;
+}
+
+.days {
+  border-radius: 0 20px 20px 20px;
+}
+.hours {
+  border-radius: 20px 0 20px 20px;
+}
+.minutes {
+  border-radius: 20px 20px 0 20px;
+}
+.seconds {
+  border-radius: 20px 20px 20px 0;
+}
+
+.unit-value {
+  color: white;
+  font-weight: 700;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.unit-label {
+  color: white;
+  font-weight: 400;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.celebrate {
+  padding: 0.6em 0;
+  font-size: 3rem;
+}
+
+.rainbow_text_animated {
+  background: linear-gradient(
+    to right,
+    blue,
+    green,
+    yellow,
+    orange,
+    red,
+    purple
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
+}

@@ -1,0 +1,46 @@
+.container {
+  border: white solid 0.5em;
+  padding: 2em 4em;
+  background-image: url(/assets/dots.svg);
+  background-size: cover;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.title {
+  margin-bottom: 0.5em;
+  line-height: 1;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  margin-bottom: 0.25em;
+  padding: 0.5em 1em;
+}
+
+.actions {
+  display: flex;
+}
+
+.button {
+  display: block;
+  background: #32857f;
+  color: white;
+  margin: 0.5em 0;
+  border: white solid 1px;
+  padding: 0.5em 1em;
+  text-align: center;
+  text-decoration: none;
+  size: 2rem;
+  width: 100%;
+}
