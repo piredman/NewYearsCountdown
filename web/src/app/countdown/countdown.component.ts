@@ -17,7 +17,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
   eventName: string;
   targetTime: DateTime;
   targetTimeBuffer = 55;
+  display = '';
   celebrate = false;
+  celebrateOverride = false;
   celebrating = false;
   audio: HTMLAudioElement;
 
@@ -49,6 +51,10 @@ export class CountdownComponent implements OnInit, OnDestroy {
         second: this.asNumber(params.get('second'), 0),
       });
 
+      this.display = this.asString(params.get('display'), '').toUpperCase();
+      this.celebrateOverride = this.asBoolean(params.get('celebrate'), false);
+      console.log(`celebrateOverride: ${this.celebrateOverride}`);
+
       this.load();
     });
   }
@@ -76,6 +82,15 @@ export class CountdownComponent implements OnInit, OnDestroy {
     return isNaN(result) ? fallback : result;
   }
 
+  asBoolean(value: string, fallback: boolean): boolean {
+    console.log(`celebrate: ${value}`);
+    if (!value) {
+      return fallback;
+    }
+
+    return value === 'true';
+  }
+
   load(): void {
     this.timeZoneGroups = this.timeZoneService.getTimeZones(this.targetTime);
 
@@ -84,7 +99,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
         const activeTimeZoneGroup = this.getActiveTimeZoneGroup(
           this.timeZoneGroups
         );
-        this.celebrate = this.isWithinBuffer(activeTimeZoneGroup.duration);
+        this.celebrate = this.celebrateOverride
+          ? this.celebrateOverride
+          : this.isWithinBuffer(activeTimeZoneGroup.duration);
         if (this.celebrate && !this.celebrating) {
           this.startCelebrating();
         }
@@ -113,7 +130,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
 
     this.celebrating = true;
     this.audio.currentTime = 0;
-    this.audio.play();
+    // this.audio.play();
   }
 
   stopCelebrating(): void {

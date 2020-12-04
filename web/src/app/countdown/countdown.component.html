@@ -1,1 +1,13 @@
-<app-region [eventName]="eventName" [data]="timeZoneRegion"></app-region>
+<app-region
+  *ngIf="display !== 'COMPACT'"
+  [eventName]="eventName"
+  [data]="timeZoneRegion"
+  [celebrateOverride]="celebrateOverride"
+></app-region>
+
+<app-region-compact
+  *ngIf="display === 'COMPACT'"
+  [eventName]="eventName"
+  [data]="timeZoneRegion"
+  [celebrateOverride]="celebrateOverride"
+></app-region-compact>

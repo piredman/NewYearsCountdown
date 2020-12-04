@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class ConfigureComponent implements OnInit {
   eventName = new FormControl();
   eventDate = new FormControl();
+  display = new FormControl();
 
   constructor(private router: Router) {}
 
@@ -30,6 +31,11 @@ export class ConfigureComponent implements OnInit {
     this.eventDate.setValue(
       datePipe.transform(newYears.toJSDate(), 'y-MM-ddThh:mm')
     );
+    this.display.setValue(false);
+  }
+
+  get displayValue() {
+    return this.display.value ? 'Compact' : 'Full';
   }
 
   onOpen(): void {
@@ -37,16 +43,22 @@ export class ConfigureComponent implements OnInit {
     const jsDate = new Date(this.eventDate.value);
     const eventDate = DateTime.fromJSDate(jsDate);
 
+    let queryParams: any = {
+      event: eventName,
+      year: eventDate.year,
+      month: eventDate.month,
+      day: eventDate.day,
+      hour: eventDate.hour,
+      minute: eventDate.minute,
+      second: eventDate.second,
+    };
+
+    if (this.display.value) {
+      queryParams.display = 'compact';
+    }
+
     this.router.navigate(['/countdown'], {
-      queryParams: {
-        event: eventName,
-        year: eventDate.year,
-        month: eventDate.month,
-        day: eventDate.day,
-        hour: eventDate.hour,
-        minute: eventDate.minute,
-        second: eventDate.second,
-      },
+      queryParams,
     });
   }
 }

@@ -10,6 +10,7 @@ import { RegionComponent } from './region/region.component';
 import { CountdownComponent } from './countdown/countdown.component';
 import { ConfigureComponent } from './configure/configure.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RegionCompactComponent } from './region-compact/region-compact.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RegionComponent,
     CountdownComponent,
     ConfigureComponent,
+    RegionCompactComponent,
   ],
   imports: [
     BrowserModule,

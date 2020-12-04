@@ -1,0 +1,35 @@
+<div class="root" *ngIf="data">
+  <div class="container">
+    <div *ngIf="!celebrate" class="countdown">
+      <div class="unit days" *ngIf="data.duration.days">
+        <div class="unit-value">{{ data.duration.days }}</div>
+        <div class="unit-label">Days</div>
+      </div>
+      <div class="unit hours" *ngIf="data.duration.hours">
+        <div class="unit-value">{{ data.duration.hours }}</div>
+        <div class="unit-label">Hours</div>
+      </div>
+      <div class="unit minutes" *ngIf="data.duration.minutes">
+        <div class="unit-value">{{ data.duration.minutes }}</div>
+        <div class="unit-label">Minutes</div>
+      </div>
+      <div class="unit seconds">
+        <div class="unit-value">
+          {{ data.duration.seconds | number: "1.0-0" }}
+        </div>
+        <div class="unit-label">Seconds</div>
+      </div>
+    </div>
+    <div *ngIf="celebrate" class="celebrate-container">
+      <div class="celebrate rainbow_text_animated">Happy</div>
+      <div class="celebrate rainbow_text_animated">{{ eventName }}!</div>
+    </div>
+
+    <div class="time-zone">
+      <div class="time-zone-name">{{ data.timeZoneName }}</div>
+      <div class="current-time">
+        {{ data.primaryDateTime | dateTime }}
+      </div>
+    </div>
+  </div>
+</div>

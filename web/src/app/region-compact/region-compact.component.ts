@@ -2,11 +2,11 @@ import { TimeZoneRegion } from 'src/app/timezone/time-zone-region';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-region',
-  templateUrl: './region.component.html',
-  styleUrls: ['./region.component.scss'],
+  selector: 'app-region-compact',
+  templateUrl: './region-compact.component.html',
+  styleUrls: ['./region-compact.component.scss'],
 })
-export class RegionComponent implements OnInit {
+export class RegionCompactComponent implements OnInit {
   @Input() eventName: string;
   @Input() data: TimeZoneRegion;
   @Input() celebrateOverride: boolean;
