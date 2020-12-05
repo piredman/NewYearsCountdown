@@ -34,7 +34,7 @@ export class ConfigureComponent implements OnInit {
     this.display.setValue(false);
   }
 
-  get displayValue() {
+  get displayValue(): string {
     return this.display.value ? 'Compact' : 'Full';
   }
 
@@ -43,7 +43,7 @@ export class ConfigureComponent implements OnInit {
     const jsDate = new Date(this.eventDate.value);
     const eventDate = DateTime.fromJSDate(jsDate);
 
-    let queryParams: any = {
+    const queryParams: any = {
       event: eventName,
       year: eventDate.year,
       month: eventDate.month,
