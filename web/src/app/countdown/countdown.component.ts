@@ -21,7 +21,6 @@ export class CountdownComponent implements OnInit, OnDestroy {
   celebrate = false;
   celebrateOverride = false;
   celebrating = false;
-  audio: HTMLAudioElement;
 
   timeZoneGroups: TimeZoneRegion[];
   timeZoneRegion: TimeZoneRegion;
@@ -35,11 +34,6 @@ export class CountdownComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.audio = new Audio();
-    this.audio.src = '/assets/farting-around.mp3';
-    this.audio.load();
-    this.audio.addEventListener('ended', this.stopCelebrating);
-
     this.route.queryParamMap.subscribe((params) => {
       this.eventName = this.asString(params.get('event'), 'New Years');
       this.targetTime = DateTime.fromObject({
@@ -129,8 +123,16 @@ export class CountdownComponent implements OnInit, OnDestroy {
     }
 
     this.celebrating = true;
-    this.audio.currentTime = 0;
-    // this.audio.play();
+    this.playAudio();
+  }
+
+  playAudio(): HTMLAudioElement {
+    const audio = new Audio();
+    audio.src = '/assets/farting-around.mp3';
+    audio.load();
+    audio.play();
+
+    return audio;
   }
 
   stopCelebrating(): void {
