@@ -1,3 +1,4 @@
+import { ThemeService } from './../theme.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TimeZone } from '@vvo/tzdb';
@@ -18,6 +19,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   targetTime: DateTime;
   targetTimeBuffer = 55;
   display = '';
+  theme = 'ORANGE';
   celebrate = false;
   celebrateOverride = false;
   celebrating = false;
@@ -30,7 +32,8 @@ export class CountdownComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private timeZoneService: TimeZoneService,
-    private dateTimeService: DateTimeService
+    private dateTimeService: DateTimeService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -46,8 +49,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
       });
 
       this.display = this.asString(params.get('display'), '').toUpperCase();
+      this.theme = this.asString(params.get('theme'), 'orange').toUpperCase();
+      console.log(`theme: ${this.theme}`);
       this.celebrateOverride = this.asBoolean(params.get('celebrate'), false);
-      console.log(`celebrateOverride: ${this.celebrateOverride}`);
 
       this.load();
     });
@@ -86,6 +90,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
+    if (this.theme === 'TEAL') {
+      this.themeService.toggleTeal();
+    }
     this.timeZoneGroups = this.timeZoneService.getTimeZones(this.targetTime);
 
     const timer = interval(1000).pipe(

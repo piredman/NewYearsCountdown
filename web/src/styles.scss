@@ -10,6 +10,19 @@
  * 1. Change the font styles in all browsers.
  * 2. Remove the margin in Firefox and Safari.
  */
+:root {
+  --clr-teal: #32857f;
+  --clr-orange: #e58110;
+
+  --bg-teal: url(/assets/teal-dots.svg);
+  // viewBox="0 0 1765.35 986"
+
+  --bg-orange: url(/assets/orange-lines.svg);
+  // default viewbox: 0 0 2472 1081.83
+
+  --clr-bg: var(--clr-orange);
+  --bg-img: var(--bg-orange);
+}
 
 button,
 input,
@@ -42,5 +55,5 @@ html {
 body {
   font-family: "MADE Tommy Soft";
   font-weight: 400;
-  background-color: #32857f;
+  background-color: var(--clr-bg);
 }

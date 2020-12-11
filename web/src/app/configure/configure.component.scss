@@ -1,7 +1,7 @@
 .container {
   border: white solid 0.5em;
   padding: 2em 4em;
-  background-image: url(/assets/dots.svg);
+  background-image: var(--bg-img);
   background-size: cover;
   line-height: 1.5;
   color: #fff;
@@ -46,7 +46,7 @@
 
 .button {
   display: block;
-  background: #32857f;
+  background: var(--clr-bg);
   color: white;
   margin: 0.5em 0;
   border: white solid 1px;
@@ -103,7 +103,7 @@
   transition: left 0.25s ease;
 }
 .switch-input:checked + .switch-label::before {
-  background-color: #89c12d;
+  background-color: #dedede;
 }
 .switch-input:checked + .switch-label::after {
   left: 24px;

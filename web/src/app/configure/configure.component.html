@@ -21,6 +21,21 @@
         />
       </div>
       <div class="label">
+        <label>Theme</label>
+        <div class="content">
+          <div class="switch">
+            <input
+              id="theme"
+              type="checkbox"
+              class="switch-input"
+              [formControl]="useAlternateTheme"
+            />
+            <label for="theme" class="switch-label"></label>
+          </div>
+          <div class="switch-text">{{ this.getThemeText }}</div>
+        </div>
+      </div>
+      <div class="label">
         <label>Display</label>
         <div class="content">
           <div class="switch">

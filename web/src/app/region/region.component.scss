@@ -4,9 +4,8 @@
   margin: 0.5em;
   border: white solid 0.5em;
   padding: 2em 0;
-  background-image: url(/assets/dots.svg);
+  background-image: var(--bg-img);
   background-size: cover;
-  // viewBox="0 0 1765.35 986"
 }
 
 .time-zone-name {
@@ -43,7 +42,7 @@
   width: 5rem;
   height: 5rem;
   line-height: 1;
-  background-color: #32857f;
+  background-color: var(--clr-bg);
 }
 
 .days {
